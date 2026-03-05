@@ -228,7 +228,7 @@ export class LikeC4CompletionProvider extends DefaultCompletionProvider {
           label: keyword.value,
           kind: CompletionItemKind.Property,
           insertTextFormat: InsertTextFormat.Snippet,
-          insertText: 'engine ${1|dot,generic|}$0',
+          insertText: 'engine ${1|dot,cola|}$0',
         })
         break
       case ['include', 'exclude'].includes(keyword.value):

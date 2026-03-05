@@ -54,7 +54,7 @@
     },
     {
       "name": "entity.name.type.enum.likec4",
-      "match": "\\b(TopBottom|LeftRight|BottomTop|RightLeft|xsmall|xs|small|sm|medium|md|large|lg|xl|xlarge|diagram|sequence|dot|generic)\\b"
+      "match": "\\b(TopBottom|LeftRight|BottomTop|RightLeft|xsmall|xs|small|sm|medium|md|large|lg|xl|xlarge|diagram|sequence|dot|cola)\\b"
     },
     {
       "name": "variable.other.property.likec4",

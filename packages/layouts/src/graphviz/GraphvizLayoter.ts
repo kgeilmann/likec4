@@ -13,6 +13,7 @@ import type { ComputedProjectsView, LayoutedProjectsView } from '@likec4/core/co
 import { nonexhaustive } from '@likec4/core/utils'
 import { loggable, rootLogger as mainLogger, wrapError } from '@likec4/log'
 import { randomString } from 'remeda'
+import { ColaLayoutAdapter } from '../cola/ColaLayoutAdapter'
 import { calcSequenceLayout } from '../sequence'
 import { DeploymentViewPrinter } from './DeploymentViewPrinter'
 import { GraphClusterSpace } from './DotPrinter'
@@ -105,6 +106,11 @@ export class GraphvizLayouter implements Disposable {
   }
 
   async layout<A extends AnyAux>(params: LayoutTaskParams<A>): Promise<LayoutResult<A>> {
+    if (params.view.engine === 'cola') {
+      const colaEngine = new ColaLayoutAdapter()
+      return await colaEngine.layout(params)
+    }
+
     const logger = rootLogger.getChild(['layout', randomString(3)])
     try {
       logger.debug`layouting view ${params.view.id}...`

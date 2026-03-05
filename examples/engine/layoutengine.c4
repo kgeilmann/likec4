@@ -26,16 +26,16 @@ views {
     include A, B, C, D, E, F, G
   }
 
-  view genericview {
-    engine generic
-    title 'Use generic'
-    
-    include *    
+  view colaview {
+    engine cola
+    title 'Use cola'
+
+    include *
   }
 
   view {
     title 'default'
-    
-    include *    
+
+    include *
   }
 }

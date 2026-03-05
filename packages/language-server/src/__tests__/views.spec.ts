@@ -301,7 +301,7 @@ describe('views', () => {
         include *
       }
       view {
-        engine generic
+        engine cola
         include *
       }
       view {

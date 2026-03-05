@@ -365,7 +365,7 @@ ViewEngineProperty:
 ;
 
 LayoutEngineValue returns string:
-  'dot' | 'generic'
+  'dot' | 'cola'
 ;
 
 ViewStringProperty:

@@ -82,13 +82,16 @@
     "fast-equals": "catalog:utils",
     "ts-graphviz": "^1.8.2",
     "@lume/kiwi": "catalog:utils",
-    "which": "^5.0.0"
+    "which": "^5.0.0",
+    "d3": "^7.9.0",
+    "webcola": "^3.4.0"
   },
   "devDependencies": {
     "@likec4/tsconfig": "workspace:*",
     "@likec4/devops": "workspace:*",
     "@types/node": "catalog:",
     "@types/which": "^3.0.4",
+    "@types/d3": "^7.4.3",
     "turbo": "catalog:",
     "typescript": "catalog:",
     "obuild": "catalog:obuild",

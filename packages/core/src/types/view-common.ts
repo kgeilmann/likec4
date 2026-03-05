@@ -69,7 +69,7 @@ export function isAutoLayoutDirection(autoLayout: unknown): autoLayout is AutoLa
   return autoLayout === 'TB' || autoLayout === 'BT' || autoLayout === 'LR' || autoLayout === 'RL'
 }
 
-export type LayoutEngine = 'dot' | 'generic'
+export type LayoutEngine = 'dot' | 'cola'
 
 export interface ViewRuleEngine {
   engine: LayoutEngine
