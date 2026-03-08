@@ -382,6 +382,7 @@ describe('LikeC4CompletionProvider', () => {
         'title',
         'description',
         'link',
+        'engine',
         'include',
         'exclude',
         'global',

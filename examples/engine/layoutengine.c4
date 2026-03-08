@@ -1,0 +1,41 @@
+specification {
+  element node
+}
+
+model {
+  A = node
+  B = node
+  A -> B
+
+  C = node
+  D = node
+  E = node
+  F = node
+  G = node
+  C -> E
+  F -> E
+  B -> G
+}
+
+views {
+
+  view dotview {
+    title 'Use dot'
+    engine dot
+
+    include A, B, C, D, E, F, G
+  }
+
+  view genericview {
+    engine generic
+    title 'Use generic'
+    
+    include *    
+  }
+
+  view {
+    title 'default'
+    
+    include *    
+  }
+}

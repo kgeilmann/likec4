@@ -7,6 +7,7 @@ import {
   _stage,
   _type,
   isViewRuleAutoLayout,
+  isViewRuleEngine,
   isViewRulePredicate,
 } from '../../types'
 import { buildElementNotations } from '../utils/buildElementNotations'
@@ -66,6 +67,7 @@ export function computeDeploymentView<M extends AnyAux>(
   )
 
   const autoLayoutRule = findLast(rules, isViewRuleAutoLayout)
+  const engineRule = findLast(rules, isViewRuleEngine)
 
   const elementNotations = buildElementNotations(nodes)
 
@@ -73,6 +75,7 @@ export function computeDeploymentView<M extends AnyAux>(
     ...view,
     [_stage]: 'computed',
     [_type]: 'deployment',
+    ...(engineRule?.engine && { engine: engineRule.engine }),
     autoLayout: {
       direction: autoLayoutRule?.direction ?? 'TB',
       ...(autoLayoutRule?.nodeSep && { nodeSep: autoLayoutRule.nodeSep }),

@@ -430,6 +430,14 @@ export function toAstViewLayoutDirection(c4: c4.ViewRuleAutoLayout['direction'])
   }
 }
 
+export function toC4ViewEngineProperty(
+  rule: ast.ViewEngineProperty,
+): c4.ViewRuleEngine {
+  return {
+    engine: rule.value as c4.LayoutEngine,
+  }
+}
+
 // export function elementExpressionFromPredicate(predicate: ast.ElementPredicate): ast.ElementExpression {
 //   if (ast.isElementExpression(predicate)) {
 //     return predicate

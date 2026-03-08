@@ -223,6 +223,14 @@ export class LikeC4CompletionProvider extends DefaultCompletionProvider {
           insertText: 'mode ${1|sequence,diagram|}$0',
         })
         break
+      case keyword.value === 'engine':
+        acceptor(context, {
+          label: keyword.value,
+          kind: CompletionItemKind.Property,
+          insertTextFormat: InsertTextFormat.Snippet,
+          insertText: 'engine ${1|dot,generic|}$0',
+        })
+        break
       case ['include', 'exclude'].includes(keyword.value):
         acceptor(context, {
           label: keyword.value,

@@ -261,7 +261,7 @@ MetadataBody: '{'
 ;
 
 MetadataAttribute:
-  key=IdTerminal ':'? value=MetadataValue ';'?
+  key=Id ':'? value=MetadataValue ';'?
 ;
 
 MetadataValue:
@@ -324,7 +324,7 @@ DynamicViewBody: '{'
 ;
 
 DynamicViewProperty:
-  DynamicViewDisplayVariantProperty | ViewProperty
+  DynamicViewDisplayVariantProperty | ViewEngineProperty | ViewProperty
 ;
 
 DynamicViewDisplayVariantProperty:
@@ -357,7 +357,15 @@ type AnyProperty =
 ;
 
 ViewProperty:
-  ViewStringProperty | LinkProperty
+  ViewStringProperty | LinkProperty | ViewEngineProperty
+;
+
+ViewEngineProperty:
+  key='engine' ':'? value=LayoutEngineValue ';'?
+;
+
+LayoutEngineValue returns string:
+  'dot' | 'generic'
 ;
 
 ViewStringProperty:
@@ -999,7 +1007,7 @@ Id returns string:
   DynamicViewDisplayVariantValue |
   IconPositionValue |
   RankValue |
-  'element' | 'model' | 'group' | 'node' | 'deployment' | 'instance';
+  'element' | 'model' | 'group' | 'node' | 'deployment' | 'instance' | 'engine';
 
 fragment EqOperator:
   (

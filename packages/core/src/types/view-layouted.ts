@@ -5,6 +5,7 @@ import type { NonEmptyArray, NonEmptyReadonlyArray } from './_common'
 import type { _layout, _stage, _type } from './const'
 import type {
   BaseViewProperties,
+  LayoutEngine,
   ViewAutoLayout,
   ViewWithHash,
   ViewWithNotation,
@@ -89,6 +90,11 @@ interface BaseLayoutedViewProperties<A extends AnyAux> extends BaseViewPropertie
    * If undefined or null, there is no layout drift or view is auto-layouted
    */
   readonly drifts?: NonEmptyReadonlyArray<LayoutedViewDriftReason> | null
+
+  /**
+   * Layout engine for this view.
+   */
+  readonly engine?: LayoutEngine
 }
 
 export interface LayoutedElementView<A extends AnyAux = AnyAux> extends BaseLayoutedViewProperties<A> {

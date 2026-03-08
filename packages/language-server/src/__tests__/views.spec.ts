@@ -294,6 +294,21 @@ describe('views', () => {
       }
     }`
 
+  test('engine').valid`${model}
+    views {
+      view {
+        engine dot
+        include *
+      }
+      view {
+        engine generic
+        include *
+      }
+      view {
+        include *
+      }
+    }`
+
   test('view folders').valid`${model}
     views "Folder" {
       view index {

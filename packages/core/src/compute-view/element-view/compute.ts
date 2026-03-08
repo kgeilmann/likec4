@@ -12,6 +12,7 @@ import {
   type NodeId,
   type ParsedElementView,
   isViewRuleAutoLayout,
+  isViewRuleEngine,
   isViewRuleGroup,
   isViewRulePredicate,
   isViewRuleRank,
@@ -235,6 +236,7 @@ export function computeElementView<A extends AnyAux>(
   )
 
   const autoLayoutRule = findLast(rules, isViewRuleAutoLayout)
+  const engineRule = findLast(rules, isViewRuleEngine)
 
   const nodeNotations = buildElementNotations(nodes)
   const ranks = collectRankConstraints(rules, nodes)
@@ -242,6 +244,7 @@ export function computeElementView<A extends AnyAux>(
   return calcViewLayoutHash({
     ...view,
     _stage: 'computed',
+    ...(engineRule?.engine && { engine: engineRule.engine }),
     autoLayout: {
       direction: autoLayoutRule?.direction ?? 'TB',
       ...(autoLayoutRule?.nodeSep && { nodeSep: autoLayoutRule.nodeSep }),

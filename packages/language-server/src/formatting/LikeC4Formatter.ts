@@ -320,6 +320,7 @@ export class LikeC4Formatter extends AbstractFormatter {
       ast.isElementStringProperty(node)
       || ast.isRelationStringProperty(node)
       || ast.isViewStringProperty(node)
+      || ast.isViewEngineProperty(node)
       || ast.isNotationProperty(node)
       || ast.isNotesProperty(node)
       || ast.isSpecificationElementStringProperty(node)
@@ -363,6 +364,7 @@ export class LikeC4Formatter extends AbstractFormatter {
         'size',
         'padding',
         'textSize',
+        'engine',
       )
 
       if (colon.nodes.length === 0) {

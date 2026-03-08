@@ -10,6 +10,7 @@ import type {
   AnyViewRuleStyle,
   BaseParsedViewProperties,
   ViewRuleAutoLayout,
+  ViewRuleEngine,
   ViewRuleGlobalPredicateRef,
   ViewRuleGlobalStyle,
   ViewRuleRank,
@@ -18,11 +19,9 @@ import type {
 /**
  * Predicates scoped to logical model
  */
-export interface ElementViewIncludePredicate<A extends AnyAux = AnyAux>
-  extends AnyIncludePredicate<ModelExpression<A>>
+export interface ElementViewIncludePredicate<A extends AnyAux = AnyAux> extends AnyIncludePredicate<ModelExpression<A>>
 {}
-export interface ElementViewExcludePredicate<A extends AnyAux = AnyAux>
-  extends AnyExcludePredicate<ModelExpression<A>>
+export interface ElementViewExcludePredicate<A extends AnyAux = AnyAux> extends AnyExcludePredicate<ModelExpression<A>>
 {}
 
 export type ElementViewPredicate<A extends AnyAux = AnyAux> =
@@ -62,6 +61,7 @@ export type ElementViewRule<A extends AnyAux = AnyAux> = ExclusiveUnion<{
   GlobalPredicateRef: ViewRuleGlobalPredicateRef
   AutoLayout: ViewRuleAutoLayout
   Rank: ElementViewRuleRank<A>
+  Engine: ViewRuleEngine
 }>
 
 export interface ParsedElementView<A extends AnyAux = AnyAux> extends BaseParsedViewProperties<A> {

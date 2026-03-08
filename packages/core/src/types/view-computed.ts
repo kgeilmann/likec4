@@ -15,6 +15,7 @@ import type {
 } from './scalar'
 import type {
   BaseViewProperties,
+  LayoutEngine,
   RankValue,
   ViewAutoLayout,
   ViewWithHash,
@@ -123,6 +124,10 @@ interface BaseComputedViewProperties<A extends AnyAux> extends BaseViewPropertie
    * If the view has manual layout (v2)
    */
   readonly hasManualLayout?: boolean
+  /**
+   * Layout engine for this view.
+   */
+  readonly engine?: LayoutEngine
 }
 
 export interface ComputedElementView<A extends AnyAux = AnyAux> extends BaseComputedViewProperties<A> {

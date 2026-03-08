@@ -1,7 +1,14 @@
 import * as c4 from '@likec4/core'
 import { invariant, isNonEmptyArray, nonexhaustive } from '@likec4/core'
-import { filter, isNonNullish, mapToObj, pipe } from 'remeda'
-import { type ParsedAstDeploymentView, ast, parseMarkdownAsString, toAutoLayout, ViewOps } from '../../ast'
+import { filter, find, isNonNullish, mapToObj, pipe } from 'remeda'
+import {
+  type ParsedAstDeploymentView,
+  ast,
+  parseMarkdownAsString,
+  toAutoLayout,
+  toC4ViewEngineProperty,
+  ViewOps,
+} from '../../ast'
 import { logWarnError } from '../../logger'
 import { stringHash } from '../../utils'
 import { removeIndent, toSingleLine } from './Base'
@@ -43,6 +50,12 @@ export function DeploymentViewParser<TBase extends WithExpressionV2 & WithDeploy
       const tags = this.convertTags(body)
       const links = this.convertLinks(body)
 
+      const engineRule = pipe(
+        props,
+        filter(p => ast.isViewEngineProperty(p)),
+        find(isNonNullish),
+      )
+
       ViewOps.writeId(astNode, id as c4.ViewId)
 
       return {
@@ -53,7 +66,10 @@ export function DeploymentViewParser<TBase extends WithExpressionV2 & WithDeploy
         description,
         tags,
         links: isNonEmptyArray(links) ? links : null,
-        rules: this.tryMap('deployment', body.rules, n => this.parseDeploymentViewRule(n)),
+        rules: [
+          ...(engineRule ? [toC4ViewEngineProperty(engineRule)] : []),
+          ...this.tryMap('deployment', body.rules, n => this.parseDeploymentViewRule(n)),
+        ],
       }
     }
 

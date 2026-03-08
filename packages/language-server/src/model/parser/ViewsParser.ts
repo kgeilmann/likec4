@@ -8,6 +8,7 @@ import {
   ast,
   parseMarkdownAsString,
   toAutoLayout,
+  toC4ViewEngineProperty,
   toColor,
   ViewOps,
 } from '../../ast'
@@ -108,6 +109,12 @@ export function ViewsParser<TBase extends WithPredicates & WithDeploymentView>(B
       const tags = this.convertTags(body)
       const links = this.convertLinks(body)
 
+      const engineRule = pipe(
+        body.props,
+        filter(p => this.isValid(p)),
+        find(ast.isViewEngineProperty),
+      )
+
       const view: ParsedAstElementView = {
         [c4._type]: 'element',
         id: id as c4.ViewId,
@@ -117,6 +124,7 @@ export function ViewsParser<TBase extends WithPredicates & WithDeploymentView>(B
         tags,
         links: isNonEmptyArray(links) ? links : null,
         rules: [
+          ...(engineRule ? [toC4ViewEngineProperty(engineRule)] : []),
           ...additionalStyles,
           ...this.tryMap('views', body.rules, r => this.parseElementViewRule(r)),
         ],
@@ -279,6 +287,12 @@ export function ViewsParser<TBase extends WithPredicates & WithDeploymentView>(B
       const tags = this.convertTags(body)
       const links = this.convertLinks(body)
 
+      const engineRule = pipe(
+        props,
+        filter(p => this.isValid(p)),
+        find(ast.isViewEngineProperty),
+      )
+
       ViewOps.writeId(astNode, id as c4.ViewId)
 
       const variant = find(props, ast.isDynamicViewDisplayVariantProperty)?.value
@@ -293,6 +307,7 @@ export function ViewsParser<TBase extends WithPredicates & WithDeploymentView>(B
         links: isNonEmptyArray(links) ? links : null,
         variant,
         rules: [
+          ...(engineRule ? [toC4ViewEngineProperty(engineRule)] : []),
           ...additionalStyles,
           ...this.tryMap('views', body.rules, n => this.parseDynamicViewRule(n)),
         ],

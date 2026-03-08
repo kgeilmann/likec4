@@ -15,6 +15,7 @@ import {
   isDynamicStepsParallel,
   isDynamicStepsSeries,
   isViewRuleAutoLayout,
+  isViewRuleEngine,
   stepEdgeId,
 } from '../../types'
 import { intersection, invariant, nonNullable, toArray, union } from '../../utils'
@@ -235,6 +236,7 @@ class DynamicViewCompute<A extends AnyAux> {
     )
 
     const autoLayoutRule = findLast(rules, isViewRuleAutoLayout)
+    const engineRule = findLast(rules, isViewRuleEngine)
 
     const nodeNotations = buildElementNotations(nodes)
 
@@ -243,6 +245,7 @@ class DynamicViewCompute<A extends AnyAux> {
       [_type]: 'dynamic',
       [_stage]: 'computed',
       variant: view.variant ?? 'diagram',
+      ...(engineRule?.engine && { engine: engineRule.engine }),
       autoLayout: {
         direction: autoLayoutRule?.direction ?? 'LR',
         ...(autoLayoutRule?.nodeSep && { nodeSep: autoLayoutRule.nodeSep }),

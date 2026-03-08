@@ -69,6 +69,16 @@ export function isAutoLayoutDirection(autoLayout: unknown): autoLayout is AutoLa
   return autoLayout === 'TB' || autoLayout === 'BT' || autoLayout === 'LR' || autoLayout === 'RL'
 }
 
+export type LayoutEngine = 'dot' | 'generic'
+
+export interface ViewRuleEngine {
+  engine: LayoutEngine
+}
+
+export function isViewRuleEngine(rule: object): rule is ViewRuleEngine {
+  return 'engine' in rule
+}
+
 export interface ViewRuleAutoLayout {
   direction: AutoLayoutDirection
   nodeSep?: number
@@ -109,6 +119,10 @@ export interface BaseParsedViewProperties<A extends AnyAux> extends BaseViewProp
    * Undefined if the view is auto-generated.
    */
   readonly docUri?: string | undefined
+  /**
+   * Layout engine for this view.
+   */
+  readonly engine?: LayoutEngine
 }
 
 export type NodeNotation = {
