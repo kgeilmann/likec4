@@ -162,6 +162,9 @@ export function ViewsParser<TBase extends WithPredicates & WithDeploymentView>(B
       if (ast.isViewRuleRank(astRule)) {
         return this.parseViewRuleRank(astRule)
       }
+      if (ast.isViewRuleAlign(astRule)) {
+        return this.parseViewRuleAlign(astRule)
+      }
       nonexhaustive(astRule)
     }
 
@@ -234,6 +237,17 @@ export function ViewsParser<TBase extends WithPredicates & WithDeploymentView>(B
       const rank = astRule.value ?? 'same'
       return {
         rank,
+        targets,
+      }
+    }
+
+    parseViewRuleAlign(astRule: ast.ViewRuleAlign): c4.ElementViewRuleAlign {
+      const targets = this.parseFqnExpressions(astRule.targets).filter((e): e is c4.ModelFqnExpr.Any =>
+        c4.ModelExpression.isFqnExpr(e as any)
+      )
+      const axis = astRule.axis as 'x' | 'y'
+      return {
+        axis,
         targets,
       }
     }

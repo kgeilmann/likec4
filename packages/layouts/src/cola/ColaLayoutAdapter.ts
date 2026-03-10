@@ -1,5 +1,6 @@
 import {
   type AnyAux,
+  type ComputedAlignConstraint,
   type ComputedView,
   type DiagramEdge,
   type DiagramNode,
@@ -15,7 +16,7 @@ import { randomString } from 'remeda'
 import { d3adaptor } from 'webcola'
 import type { LayoutResult, LayoutTaskParams } from '../graphviz/GraphvizLayoter'
 import type { DotSource } from '../graphviz/types'
-import type { ColaGraph, ColaNode } from './types'
+import type { ColaAlignmentConstraint, ColaGraph, ColaNode } from './types'
 
 const rootLogger = mainLogger.getChild(['cola', 'layouter'])
 
@@ -75,7 +76,42 @@ export class ColaLayoutAdapter {
       direction: view.autoLayout.direction,
     }
 
-    return { nodes, edges, options }
+    const constraints = this.computeAlignConstraints(view, nodeMap)
+
+    const result: ColaGraph = { nodes, edges, options }
+    if (constraints) {
+      result.constraints = constraints
+    }
+    return result
+  }
+
+  private computeAlignConstraints(
+    view: ComputedView,
+    nodeMap: Map<string, ColaNode>,
+  ): ColaAlignmentConstraint[] | undefined {
+    const aligns = (view as any).aligns as ComputedAlignConstraint[] | undefined
+    if (!aligns || aligns.length === 0) {
+      return undefined
+    }
+
+    const constraints: ColaAlignmentConstraint[] = []
+    for (const align of aligns) {
+      const offsets = []
+      for (const nodeId of align.nodes) {
+        const colaNode = nodeMap.get(nodeId)
+        if (colaNode) {
+          offsets.push({ node: colaNode.index, offset: 0 })
+        }
+      }
+      if (offsets.length >= 2) {
+        constraints.push({
+          type: 'alignment',
+          axis: align.axis,
+          offsets,
+        })
+      }
+    }
+    return constraints.length > 0 ? constraints : undefined
   }
 
   private async runCola(input: ColaGraph): Promise<ColaGraph> {
@@ -89,6 +125,10 @@ export class ColaLayoutAdapter {
 
     if (input.options.linkDistance) {
       cola.linkDistance(input.options.linkDistance!)
+    }
+
+    if (input.constraints && input.constraints.length > 0) {
+      cola.constraints(input.constraints)
     }
 
     cola.start(30, 30, 30)

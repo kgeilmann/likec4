@@ -31,6 +31,10 @@ views {
     title 'Use cola'
 
     include *
+    align x { A, B }
+    align y { C, F }
+    align x { C, E }
+
   }
 
   view {

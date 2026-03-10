@@ -5,6 +5,7 @@ import type { _type } from './const'
 import type { ModelExpression, ModelFqnExpr } from './expression-model'
 import type { BorderStyle, Color, ShapeSize, SpacingSize, TextSize } from './styles'
 import type {
+  AlignAxis,
   AnyExcludePredicate,
   AnyIncludePredicate,
   AnyViewRuleStyle,
@@ -14,6 +15,7 @@ import type {
   ViewRuleGlobalPredicateRef,
   ViewRuleGlobalStyle,
   ViewRuleRank,
+  ViewRuleAlign,
 } from './view-common'
 
 /**
@@ -52,6 +54,11 @@ export function isViewRuleRank<A extends AnyAux>(rule: ElementViewRule<A>): rule
   return 'rank' in rule && Array.isArray((rule as ElementViewRuleRank<A>).targets)
 }
 
+export interface ElementViewRuleAlign<A extends AnyAux = AnyAux> extends ViewRuleAlign<ModelFqnExpr<A>> {}
+export function isViewRuleAlign<A extends AnyAux>(rule: ElementViewRule<A>): rule is ElementViewRuleAlign<A> {
+  return 'axis' in rule && Array.isArray((rule as ElementViewRuleAlign<A>).targets)
+}
+
 export type ElementViewRule<A extends AnyAux = AnyAux> = ExclusiveUnion<{
   IncludePredicate: ElementViewIncludePredicate<A>
   ExcludePredicate: ElementViewExcludePredicate<A>
@@ -61,6 +68,7 @@ export type ElementViewRule<A extends AnyAux = AnyAux> = ExclusiveUnion<{
   GlobalPredicateRef: ViewRuleGlobalPredicateRef
   AutoLayout: ViewRuleAutoLayout
   Rank: ElementViewRuleRank<A>
+  Align: ElementViewRuleAlign<A>
   Engine: ViewRuleEngine
 }>
 

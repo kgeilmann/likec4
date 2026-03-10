@@ -49,3 +49,16 @@ function areSame(a: ast.FqnRef | undefined, b: ast.FqnRef | undefined): boolean 
   if (a.value.ref !== b.value.ref) return false
   return areSame(a.parent, b.parent)
 }
+
+export const viewRuleAlignChecks = (_services: LikeC4Services): ValidationCheck<ast.ViewRuleAlign> => {
+  return tryOrLog((el, accept) => {
+    const targetExprs = collectFqnExprs(el.targets)
+
+    if (targetExprs.length < 2) {
+      accept('warning', 'Align rule should have at least 2 targets', {
+        node: el,
+        property: 'targets',
+      })
+    }
+  })
+}

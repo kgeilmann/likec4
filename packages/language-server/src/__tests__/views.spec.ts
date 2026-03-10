@@ -309,6 +309,15 @@ describe('views', () => {
       }
     }`
 
+  test('align').valid`${model}
+    views {
+      view {
+        include *
+        align x {user, system}
+        align y {user, system.backend}
+      }      
+    }`
+
   test('view folders').valid`${model}
     views "Folder" {
       view index {

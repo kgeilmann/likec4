@@ -64,6 +64,13 @@ export interface ViewRuleRank<Expr> {
   rank: RankValue
 }
 
+export type AlignAxis = 'x' | 'y'
+
+export interface ViewRuleAlign<Expr> {
+  targets: Expr[]
+  axis: AlignAxis
+}
+
 export type AutoLayoutDirection = 'TB' | 'BT' | 'LR' | 'RL'
 export function isAutoLayoutDirection(autoLayout: unknown): autoLayout is AutoLayoutDirection {
   return autoLayout === 'TB' || autoLayout === 'BT' || autoLayout === 'LR' || autoLayout === 'RL'

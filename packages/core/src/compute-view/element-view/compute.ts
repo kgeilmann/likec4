@@ -4,6 +4,7 @@ import { LikeC4Model } from '../../model/LikeC4Model'
 import type { RelationshipModel } from '../../model/RelationModel'
 import {
   type AnyAux,
+  type ComputedAlignConstraint,
   type ComputedElementView,
   type ComputedNode,
   type ComputedRankConstraint,
@@ -12,6 +13,7 @@ import {
   type NodeId,
   type ParsedElementView,
   isViewRuleAutoLayout,
+  isViewRuleAlign,
   isViewRuleEngine,
   isViewRuleGroup,
   isViewRulePredicate,
@@ -240,6 +242,7 @@ export function computeElementView<A extends AnyAux>(
 
   const nodeNotations = buildElementNotations(nodes)
   const ranks = collectRankConstraints(rules, nodes)
+  const aligns = collectAlignConstraints(rules, nodes)
 
   return calcViewLayoutHash({
     ...view,
@@ -263,6 +266,7 @@ export function computeElementView<A extends AnyAux>(
       },
     }),
     ...(ranks.length > 0 && { ranks }),
+    ...(aligns.length > 0 && { aligns }),
   })
 }
 
@@ -287,6 +291,32 @@ function collectRankConstraints<A extends AnyAux>(
     constraints.push({
       type: rule.rank,
       nodes: nodesInRank,
+    })
+  }
+  return constraints
+}
+
+function collectAlignConstraints<A extends AnyAux>(
+  rules: ElementViewRule<A>[],
+  nodes: ReadonlyArray<ComputedNode<A>>,
+): ComputedAlignConstraint[] {
+  const constraints: ComputedAlignConstraint[] = []
+  for (const rule of rules) {
+    if (!isViewRuleAlign(rule) || rule.targets.length === 0) {
+      continue
+    }
+    const isTargeted = anyPass(rule.targets.map(elementExprToPredicate))
+    const nodesInAlign = pipe(
+      nodes,
+      filter(isTargeted),
+      map(n => n.id),
+    )
+    if (!hasAtLeast(nodesInAlign, 2)) { // alignment requires at least 2 nodes
+      continue
+    }
+    constraints.push({
+      axis: rule.axis,
+      nodes: nodesInAlign,
     })
   }
   return constraints

@@ -23,8 +23,15 @@ export interface ColaOptions {
   nodeSep?: number
 }
 
+export interface ColaAlignmentConstraint {
+  type: 'alignment'
+  axis: 'x' | 'y'
+  offsets: Array<{ node: number; offset: number }>
+}
+
 export interface ColaGraph {
   nodes: ColaNode[]
   edges: ColaEdge[]
   options: ColaOptions
+  constraints?: ColaAlignmentConstraint[]
 }

@@ -14,6 +14,7 @@ import type {
   Icon,
 } from './scalar'
 import type {
+  AlignAxis,
   BaseViewProperties,
   LayoutEngine,
   RankValue,
@@ -115,6 +116,11 @@ export interface ComputedRankConstraint {
   nodes: scalar.NodeId[]
 }
 
+export interface ComputedAlignConstraint {
+  axis: AlignAxis
+  nodes: scalar.NodeId[]
+}
+
 interface BaseComputedViewProperties<A extends AnyAux> extends BaseViewProperties<A>, ViewWithHash, ViewWithNotation {
   readonly [_stage]: 'computed'
   readonly autoLayout: ViewAutoLayout
@@ -135,6 +141,7 @@ export interface ComputedElementView<A extends AnyAux = AnyAux> extends BaseComp
   readonly viewOf?: aux.StrictFqn<A>
   readonly extends?: aux.StrictViewId<A>
   readonly ranks?: ComputedRankConstraint[]
+  readonly aligns?: ComputedAlignConstraint[]
 }
 
 export interface ComputedDeploymentView<A extends AnyAux = AnyAux> extends BaseComputedViewProperties<A> {

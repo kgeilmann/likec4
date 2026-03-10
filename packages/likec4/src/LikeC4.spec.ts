@@ -218,6 +218,12 @@ describe('LikeC4', () => {
           ],
           "folder": "issue-1624",
         },
+        "layout-engine": {
+          "documents": [
+            "layoutengine.c4",
+          ],
+          "folder": "engine",
+        },
         "multi-metadata-extend": {
           "documents": [
             "base.c4",

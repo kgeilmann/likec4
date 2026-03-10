@@ -380,7 +380,8 @@ ViewRule:
   ViewRuleGroup |
   ViewRuleStyleOrGlobalRef |
   ViewRuleAutoLayout |
-  ViewRuleRank
+  ViewRuleRank |
+  ViewRuleAlign
 ;
 
 ViewRuleRank:
@@ -391,6 +392,16 @@ ViewRuleRank:
 
 RankValue returns string:
   'same' | 'min' | 'max' | 'source' | 'sink';
+
+ViewRuleAlign:
+  'align' axis=AlignAxis '{'
+    targets=FqnExpressions
+  '}'
+;
+
+AlignAxis returns string:
+  'x' | 'y'
+;
 
 ViewRuleGroup:
   'group' title=String? '{'
