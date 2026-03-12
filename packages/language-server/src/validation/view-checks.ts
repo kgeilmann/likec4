@@ -62,3 +62,20 @@ export const viewRuleAlignChecks = (_services: LikeC4Services): ValidationCheck<
     }
   })
 }
+
+export const viewRulePositionChecks = (_services: LikeC4Services): ValidationCheck<ast.ViewRulePosition> => {
+  return tryOrLog((el, accept) => {
+    if (!el.left.ref) {
+      accept('error', 'Left element is not resolved', {
+        node: el.left,
+        property: 'ref',
+      })
+    }
+    if (!el.right.ref) {
+      accept('error', 'Right element is not resolved', {
+        node: el.right,
+        property: 'ref',
+      })
+    }
+  })
+}

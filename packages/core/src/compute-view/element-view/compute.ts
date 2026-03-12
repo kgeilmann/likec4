@@ -22,6 +22,8 @@ import {
   ModelFqnExpr,
   ModelRelationExpr,
   whereOperatorAsPredicate,
+  isViewRulePosition,
+  type ComputedPositionConstraint,
 } from '../../types'
 import { invariant, nonexhaustive, nonNullable, sortParentsFirst } from '../../utils'
 import { DefaultMap } from '../../utils/mnemonist'
@@ -243,6 +245,7 @@ export function computeElementView<A extends AnyAux>(
   const nodeNotations = buildElementNotations(nodes)
   const ranks = collectRankConstraints(rules, nodes)
   const aligns = collectAlignConstraints(rules, nodes)
+  const positions = collectPositionConstraints(rules, nodes)
 
   return calcViewLayoutHash({
     ...view,
@@ -267,6 +270,7 @@ export function computeElementView<A extends AnyAux>(
     }),
     ...(ranks.length > 0 && { ranks }),
     ...(aligns.length > 0 && { aligns }),
+    ...(positions.length > 0 && { positions }),
   })
 }
 
@@ -321,6 +325,41 @@ function collectAlignConstraints<A extends AnyAux>(
   }
   return constraints
 }
+
+function collectPositionConstraints<A extends AnyAux>(
+  rules: ElementViewRule<A>[],
+  nodes: ReadonlyArray<ComputedNode<A>>,
+): ComputedPositionConstraint[] {
+  const constraints: ComputedPositionConstraint[] = []
+  for (const rule of rules) {
+    if (!isViewRulePosition(rule) || !rule.positionDirection || !rule.left || !rule.right) {
+      continue
+    }
+    
+    const leftPred = elementExprToPredicate(rule.left)
+    const fqnLeft = pipe(
+      nodes, 
+      filter(leftPred), 
+      map(n=>n.id)
+    )
+    const rightPred = elementExprToPredicate(rule.right)
+    const fqnRight = pipe(
+      nodes, 
+      filter(rightPred), 
+      map(n=>n.id)
+    )
+    if (!hasAtLeast(fqnLeft, 1) || !hasAtLeast(fqnRight, 1)) {
+      continue
+    }
+    constraints.push({
+      direction : rule.positionDirection,      
+      left : fqnLeft[0],
+      right: fqnRight[0]
+    })
+  }
+  return constraints
+}
+
 
 /**
  * Clean up group.explicits and group.implicits

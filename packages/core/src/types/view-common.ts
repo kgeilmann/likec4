@@ -71,6 +71,14 @@ export interface ViewRuleAlign<Expr> {
   axis: AlignAxis
 }
 
+export type PositionDirection = 'left' | 'right' | 'above' | 'below'
+
+export interface ViewRulePosition<Expr> {
+  positionDirection: PositionDirection
+  left: Expr
+  right: Expr
+}
+
 export type AutoLayoutDirection = 'TB' | 'BT' | 'LR' | 'RL'
 export function isAutoLayoutDirection(autoLayout: unknown): autoLayout is AutoLayoutDirection {
   return autoLayout === 'TB' || autoLayout === 'BT' || autoLayout === 'LR' || autoLayout === 'RL'

@@ -1,6 +1,7 @@
 import {
   type AnyAux,
   type ComputedAlignConstraint,
+  type ComputedPositionConstraint,
   type ComputedView,
   type DiagramEdge,
   type DiagramNode,
@@ -16,7 +17,7 @@ import { randomString } from 'remeda'
 import { d3adaptor } from 'webcola'
 import type { LayoutResult, LayoutTaskParams } from '../graphviz/GraphvizLayoter'
 import type { DotSource } from '../graphviz/types'
-import type { ColaAlignmentConstraint, ColaGraph, ColaNode } from './types'
+import type { ColaAlignmentConstraint, ColaGraph, ColaNode, ColaPositionConstraint } from './types'
 
 const rootLogger = mainLogger.getChild(['cola', 'layouter'])
 
@@ -77,10 +78,14 @@ export class ColaLayoutAdapter {
     }
 
     const constraints = this.computeAlignConstraints(view, nodeMap)
+    const positionConstraints = this.computePositionConstraints(view, nodeMap)
 
     const result: ColaGraph = { nodes, edges, options }
     if (constraints) {
       result.constraints = constraints
+    }
+    if (positionConstraints) {
+      result.positionConstraints = positionConstraints
     }
     return result
   }
@@ -114,6 +119,56 @@ export class ColaLayoutAdapter {
     return constraints.length > 0 ? constraints : undefined
   }
 
+  private computePositionConstraints(
+    view: ComputedView,
+    nodeMap: Map<string, ColaNode>,
+  ): ColaPositionConstraint[] | undefined {
+    const positions = (view as any).positions as ComputedPositionConstraint[] | undefined
+    if (!positions || positions.length === 0) {
+      return undefined
+    }
+
+    const constraints: ColaPositionConstraint[] = []
+    for (const pos of positions) {
+      const leftNode = nodeMap.get(pos.left)
+      const rightNode = nodeMap.get(pos.right)
+      if (!leftNode || !rightNode) {
+        continue
+      }
+
+      let axis: 'x' | 'y'
+      let type: 'precedes' | 'follows'
+
+      switch (pos.direction) {
+        case 'left':
+          axis = 'x'
+          type = 'precedes'
+          break
+        case 'right':
+          axis = 'x'
+          type = 'follows'
+          break
+        case 'above':
+          axis = 'y'
+          type = 'precedes'
+          break
+        case 'below':
+          axis = 'y'
+          type = 'follows'
+          break
+      }
+
+      constraints.push({
+        type,
+        axis,
+        left: leftNode.index,
+        right: rightNode.index,
+      })
+    }
+
+    return constraints.length > 0 ? constraints : undefined
+  }
+
   private async runCola(input: ColaGraph): Promise<ColaGraph> {
     const logger = rootLogger.getChild(['runCola', randomString(4)])
 
@@ -127,8 +182,12 @@ export class ColaLayoutAdapter {
       cola.linkDistance(input.options.linkDistance!)
     }
 
-    if (input.constraints && input.constraints.length > 0) {
-      cola.constraints(input.constraints)
+    const allConstraints = [
+      ...(input.constraints ?? []),
+      ...(input.positionConstraints ?? []),
+    ]
+    if (allConstraints.length > 0) {
+      cola.constraints(allConstraints)
     }
 
     cola.start(30, 30, 30)

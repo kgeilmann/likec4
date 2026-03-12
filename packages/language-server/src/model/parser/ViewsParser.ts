@@ -165,6 +165,9 @@ export function ViewsParser<TBase extends WithPredicates & WithDeploymentView>(B
       if (ast.isViewRuleAlign(astRule)) {
         return this.parseViewRuleAlign(astRule)
       }
+      if (ast.isViewRulePosition(astRule)) {
+        return this.parseViewRulePosition(astRule)
+      }
       nonexhaustive(astRule)
     }
 
@@ -249,6 +252,17 @@ export function ViewsParser<TBase extends WithPredicates & WithDeploymentView>(B
       return {
         axis,
         targets,
+      }
+    }
+
+    parseViewRulePosition(astRule: ast.ViewRulePosition): c4.ElementViewRulePosition {
+      const left = this.parseFqnRefExpr(astRule.left) as c4.ModelFqnExpr.Any
+      const right = this.parseFqnRefExpr(astRule.right) as c4.ModelFqnExpr.Any
+      const direction = astRule.direction as 'left' | 'right' | 'above' | 'below'
+      return {
+        direction,
+        left,
+        right,
       }
     }
 

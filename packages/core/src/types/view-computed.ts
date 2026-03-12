@@ -17,6 +17,7 @@ import type {
   AlignAxis,
   BaseViewProperties,
   LayoutEngine,
+  PositionDirection,
   RankValue,
   ViewAutoLayout,
   ViewWithHash,
@@ -121,6 +122,12 @@ export interface ComputedAlignConstraint {
   nodes: scalar.NodeId[]
 }
 
+export interface ComputedPositionConstraint {
+  direction: PositionDirection
+  left: scalar.NodeId
+  right: scalar.NodeId
+}
+
 interface BaseComputedViewProperties<A extends AnyAux> extends BaseViewProperties<A>, ViewWithHash, ViewWithNotation {
   readonly [_stage]: 'computed'
   readonly autoLayout: ViewAutoLayout
@@ -142,6 +149,7 @@ export interface ComputedElementView<A extends AnyAux = AnyAux> extends BaseComp
   readonly extends?: aux.StrictViewId<A>
   readonly ranks?: ComputedRankConstraint[]
   readonly aligns?: ComputedAlignConstraint[]
+  readonly positions?: ComputedPositionConstraint[]
 }
 
 export interface ComputedDeploymentView<A extends AnyAux = AnyAux> extends BaseComputedViewProperties<A> {

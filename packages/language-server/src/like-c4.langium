@@ -381,7 +381,8 @@ ViewRule:
   ViewRuleStyleOrGlobalRef |
   ViewRuleAutoLayout |
   ViewRuleRank |
-  ViewRuleAlign
+  ViewRuleAlign |
+  ViewRulePosition
 ;
 
 ViewRuleRank:
@@ -401,6 +402,14 @@ ViewRuleAlign:
 
 AlignAxis returns string:
   'x' | 'y'
+;
+
+ViewRulePosition:
+  'position' direction=PositionDirection left=FqnRefExpr ',' right=FqnRefExpr
+;
+
+PositionDirection returns string:
+  'left' | 'right' | 'above' | 'below'
 ;
 
 ViewRuleGroup:

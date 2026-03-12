@@ -29,9 +29,17 @@ export interface ColaAlignmentConstraint {
   offsets: Array<{ node: number; offset: number }>
 }
 
+export interface ColaPositionConstraint {
+  type: 'precedes' | 'follows'
+  left: number
+  right: number
+  axis?: 'x' | 'y'
+}
+
 export interface ColaGraph {
   nodes: ColaNode[]
   edges: ColaEdge[]
   options: ColaOptions
   constraints?: ColaAlignmentConstraint[]
+  positionConstraints?: ColaPositionConstraint[]
 }

@@ -390,7 +390,8 @@ describe('LikeC4CompletionProvider', () => {
         'style',
         'autoLayout',
         'rank',
-        'align'
+        'align',
+        'position',
       ],
       disposeAfterCheck: true,
     })
@@ -432,7 +433,8 @@ describe('LikeC4CompletionProvider', () => {
         'style',
         'autoLayout',
         'rank',
-        'align'
+        'align',
+        'position',
       ],
       disposeAfterCheck: true,
     })
@@ -591,7 +593,8 @@ describe('LikeC4CompletionProvider', () => {
         'style',
         'autoLayout',
         'rank',
-        'align'
+        'align',
+        'position'
       ],
       disposeAfterCheck: true,
     })
@@ -665,7 +668,8 @@ describe('LikeC4CompletionProvider', () => {
         'style',
         'autoLayout',
         'rank',
-        'align'
+        'align',
+        'position'
       ],
       disposeAfterCheck: true,
     })

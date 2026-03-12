@@ -318,6 +318,14 @@ describe('views', () => {
       }      
     }`
 
+    test('left').valid`${model}
+    views {
+      view {
+        include *
+        left user, system
+        above user, system.backend
+      }      
+    }`
   test('view folders').valid`${model}
     views "Folder" {
       view index {

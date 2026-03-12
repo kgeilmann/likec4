@@ -10,12 +10,14 @@ import type {
   AnyIncludePredicate,
   AnyViewRuleStyle,
   BaseParsedViewProperties,
+  PositionDirection,
   ViewRuleAutoLayout,
   ViewRuleEngine,
   ViewRuleGlobalPredicateRef,
   ViewRuleGlobalStyle,
   ViewRuleRank,
   ViewRuleAlign,
+  ViewRulePosition,
 } from './view-common'
 
 /**
@@ -59,6 +61,11 @@ export function isViewRuleAlign<A extends AnyAux>(rule: ElementViewRule<A>): rul
   return 'axis' in rule && Array.isArray((rule as ElementViewRuleAlign<A>).targets)
 }
 
+export interface ElementViewRulePosition<A extends AnyAux = AnyAux> extends ViewRulePosition<ModelFqnExpr<A>> {}
+export function isViewRulePosition<A extends AnyAux>(rule: ElementViewRule<A>): rule is ElementViewRulePosition<A> {
+  return 'direction' in rule && 'left' in rule && 'right' in rule
+}
+
 export type ElementViewRule<A extends AnyAux = AnyAux> = ExclusiveUnion<{
   IncludePredicate: ElementViewIncludePredicate<A>
   ExcludePredicate: ElementViewExcludePredicate<A>
@@ -69,6 +76,7 @@ export type ElementViewRule<A extends AnyAux = AnyAux> = ExclusiveUnion<{
   AutoLayout: ViewRuleAutoLayout
   Rank: ElementViewRuleRank<A>
   Align: ElementViewRuleAlign<A>
+  Position: ElementViewRulePosition<A>
   Engine: ViewRuleEngine
 }>
 

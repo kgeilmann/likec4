@@ -32,8 +32,9 @@ views {
 
     include *
     align x { A, B }
-    align y { C, F }
-    align x { C, E }
+    position above B,A
+    position left C,E
+    position right C,B
 
   }
 
